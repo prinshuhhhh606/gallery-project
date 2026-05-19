@@ -1,60 +1,73 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "tailwindcss";
 
 const Gallery = () => {
-  const [title, setTitle] = useState([]);
+  const [images, setImages] = useState([]);
   const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    async function fun() {
+    async function fetchImages() {
+      setLoading(true);
+
       const res = await axios.get(
         `https://picsum.photos/v2/list?page=${page}&limit=12`,
       );
-      console.log(res.data);
-      setTitle(res.data);
+
+      setImages(res.data);
+      setTimeout(() => {
+         setLoading(false);
+      },100);
+      
     }
-    fun();
+
+    fetchImages();
   }, [page]);
 
- 
   return (
-    <div className="min-h-screen p-6 pb-24">
-      <h1 className=" ml-5  rounded-lg bg-black h-10 w-10 text-white font-bold flex justify-center items-center">
-        {page}
-      </h1>
-      <div className="  m-5  flex justify-between overflow-x-auto flex-wrap">
-        {title.map(function (el, idx) {
-          return (
-            <h1 key={idx}>
+    <div className="min-h-screen p-6">
+      <h1 className="text-2xl font-bold mb-5">Page {page}</h1>
+
+      {/* Loading */}
+      <div className="">
+      {loading ? (
+        <h1 className="text-2xl font-bold text-center mt-70">Loading...</h1>
+      ) : (
+        <div className="flex flex-wrap gap-5 justify-center">
+          {images.map((el, idx) => (
+            <div key={idx}>
               <img
                 src={el.download_url}
                 alt="image"
-                className=" h-65 w-55 object-cover rounded flex"
+                
+                className="h-64 w-56 object-cover rounded-lg"
               />
-              Hello {el.author}
-            </h1>
-          );
-        })}
+
+              <h1>{el.author}</h1>
+            </div>
+          ))}
+          </div>
+      )}
       </div>
-      <div className="flex gap-12 top-175 justify-center w-full fixed ">
-        <button
-          className="  border-3 p-1 h-13 w-20 rounded-xl bg-green-600 active:scale-95  "
+
+      {/* Buttons */}
+      <div className="flex justify-center gap-10 mt-10">
+        <button 
+          className={` ${loading ? "hidden" : "block"} bg-green-600 text-white px-5 py-2 rounded-xl`}
           onClick={() => {
             if (page > 1) {
               setPage(page - 1);
-             
             }
-             
           }}
+         
         >
           Prev
         </button>
+
         <button
-          className="border-3 p-1 h-13 w-20 rounded-xl bg-green-600 active:scale-95"
+          className={` ${loading ? "hidden" : "block"} bg-green-600 text-white px-5 py-2 rounded-xl`}
           onClick={() => {
             setPage(page + 1);
-             
           }}
         >
           Next
