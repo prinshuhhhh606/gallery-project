@@ -17,7 +17,7 @@ const Gallery = () => {
       setImages(res.data);
       setTimeout(() => {
          setLoading(false);
-      },100);
+      },1000);
       
     }
 
@@ -30,36 +30,42 @@ const Gallery = () => {
 
       {/* Loading */}
       <div className="">
-      {loading ? (
-        <h1 className="text-2xl font-bold text-center mt-70">Loading...</h1>
-      ) : (
-        <div className="flex flex-wrap gap-5 justify-center">
-          {images.map((el, idx) => (
-            <div key={idx}>
-              <img
-                src={el.download_url}
-                alt="image"
-                
-                className="h-64 w-56 object-cover rounded-lg"
-              />
+        {loading ? (
+          <div className="flex flex-wrap gap-5 justify-center">
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((item) => (
+              <div key={item} className="w-56">
+                <div className="h-64 w-56 bg-gray-300 rounded-lg animate-pulse"></div>
 
-              <h1>{el.author}</h1>
-            </div>
-          ))}
+                <div className="h-4 w-32 bg-gray-300 rounded mt-3 animate-pulse"></div>
+              </div>
+            ))}
           </div>
-      )}
+        ) : (
+          <div className="flex flex-wrap gap-5 justify-center">
+            {images.map((el, idx) => (
+              <div key={idx}>
+                <img
+                  src={el.download_url}
+                  alt="image"
+                  className="h-64 w-56 object-cover rounded-lg"
+                />
+
+                <h1>{el.author}</h1>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Buttons */}
       <div className="flex justify-center gap-10 mt-10">
-        <button 
+        <button
           className={` ${loading ? "hidden" : "block"} bg-green-600 text-white px-5 py-2 rounded-xl`}
           onClick={() => {
             if (page > 1) {
               setPage(page - 1);
             }
           }}
-         
         >
           Prev
         </button>
